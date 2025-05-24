@@ -30,7 +30,7 @@ public class UserController {
     // para empezar
     @GetMapping("/test")
     public String hello() {
-        return "Hola, mundo";
+        return "Hola, mundo!";
     }
 
     // Get User
