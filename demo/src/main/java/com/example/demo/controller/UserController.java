@@ -27,6 +27,12 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    // para empezar
+    @GetMapping("/test")
+    public String hello() {
+        return "Hola, mundo";
+    }
+
     // Get User
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Integer userId) {
