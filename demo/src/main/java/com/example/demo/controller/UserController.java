@@ -15,7 +15,7 @@ import java.util.Set;
 public class UserController {
 
     @Autowired
-    private com.example.demo.service.UserService userService;
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(
@@ -27,17 +27,17 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    // para empezar
-    @GetMapping("/test")
-    public String hello() {
-        return "Hola, mundo!";
-    }
-
     // Get User
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Integer userId) {
         User user = userService.getUserById(userId);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    // para empezar
+    @GetMapping("/test")
+    public String hello() {
+        return "Hola, mundo";
     }
 
     // Post User
