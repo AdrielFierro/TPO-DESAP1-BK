@@ -7,6 +7,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+<<<<<<< HEAD
+import com.example.demo.controller.config.JwtService;
+=======
+>>>>>>> origin/master
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 
@@ -20,6 +24,21 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+<<<<<<< HEAD
+    @Autowired
+    private JwtService jwts;
+
+    public Integer getIdfromToken(String accessToken) {
+
+        accessToken = accessToken.substring(7); // Eliminar "Bearer "
+        int idusuario = jwts.extractId(accessToken);
+
+        return idusuario;
+
+    }
+
+=======
+>>>>>>> origin/master
     public List<User> getAllUsers(String contains, int skip, int limit, String orderby) {
         Pageable pageable = PageRequest.of(skip / limit, limit, Sort.by(orderby));
         return userRepository.findUsers(contains, pageable);

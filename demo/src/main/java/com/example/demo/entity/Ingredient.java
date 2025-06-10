@@ -34,4 +34,10 @@ public class Ingredient {
     @JoinColumn(name = "idRecipe") // Foreign Key hacia la tabla Recipe
     private Recipe receta;
 
+<<<<<<< HEAD
+    @Column // Foreign Key hacia la tabla Recipe
+    private Integer usuario;
+
+=======
+>>>>>>> origin/master
 }
