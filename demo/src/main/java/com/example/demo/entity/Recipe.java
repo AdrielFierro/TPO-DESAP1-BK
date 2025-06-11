@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-<<<<<<< HEAD
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,18 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Recipe {
 
-=======
-import jakarta.persistence.*;
-import lombok.Data;
-
-@Data
-@Entity
-public class Recipe {
-
-    public Recipe() {
-    }
-
->>>>>>> origin/master
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idRecipe;
@@ -36,13 +23,8 @@ public class Recipe {
     @Column
     private String title;
 
-<<<<<<< HEAD
     @ElementCollection
     private List<String> image;
-=======
-    @Column
-    private String image;
->>>>>>> origin/master
 
     @Column(nullable = false)
     private Integer userId;
@@ -50,7 +32,6 @@ public class Recipe {
     @Column
     private String process;
 
-<<<<<<< HEAD
     @Column
     private Status status;
 
@@ -60,6 +41,4 @@ public class Recipe {
     @Column(nullable = false)
     private LocalDateTime fecha;
 
-=======
->>>>>>> origin/master
 }
