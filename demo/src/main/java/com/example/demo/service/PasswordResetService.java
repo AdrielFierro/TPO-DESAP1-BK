@@ -32,7 +32,7 @@ public class PasswordResetService {
     // Generar un código TOTP de 4 dígitos para un usuario
     public String generateTOTP(String email) {
         int code = gAuth.getTotpPassword("userSecretKey");
-        String fourDigitCode = String.format("%04d", code % 10000);
+        String fourDigitCode = String.format("%06d", code % 1000000);
 
         // Log para verificar el código generado y almacenado
         resetTokens.put(email, fourDigitCode);
@@ -54,6 +54,14 @@ public class PasswordResetService {
         String totpCode = generateTOTP(email); // Genera el TOTP
         String subject = "Password Reset Code";
         String body = "Your TOTP code for password reset is: " + totpCode + ". This code will expire in 5 minutes.";
+        sendEmail(email, subject, body); // Envía el correo
+    }
+
+    public void verifyUserEmail(String email) {
+        String totpCode = generateTOTP(email); // Genera el TOTP
+        String subject = "Account verification Code";
+        String body = "Your TOTP code for account verification is: " + totpCode
+                + ". This code will expire in 5 minutes.";
         sendEmail(email, subject, body); // Envía el correo
     }
 

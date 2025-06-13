@@ -55,6 +55,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User confirmEmail(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        user.setStatus(true);
+        User confirmedEmailUser = userRepository.save(user);
+        return confirmedEmailUser;
+    }
+
     public void deleteUser(Integer userId) {
         userRepository.deleteById(userId);
     }
@@ -101,6 +108,14 @@ public class UserService {
 
     public boolean isUsernameUsed(String username) {
         return userRepository.findByUsername(username).isPresent();
+    }
+
+    public boolean isEmailconfirmed(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User to follow not found"));
+
+        return user.getStatus();
     }
 
 }

@@ -115,6 +115,13 @@ public class UserController {
         return ResponseEntity.ok(exists);
     }
 
+    // is email confirmed?
+    @GetMapping("/isEmailconfirmed")
+    public ResponseEntity<Boolean> isEmailconfirmed(@RequestParam String email) {
+        boolean exists = userService.isEmailconfirmed(email);
+        return ResponseEntity.ok(exists);
+    }
+
     // Get User by Username
     @GetMapping("/isUsernameUsed")
     public ResponseEntity<Boolean> isUsernameUsed(@RequestParam String username) {
