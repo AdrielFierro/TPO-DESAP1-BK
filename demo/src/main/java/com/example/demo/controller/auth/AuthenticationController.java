@@ -16,6 +16,7 @@ import com.example.demo.controller.dto.RefreshTokenRequest;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.repository.RefreshTokenRepository;
 import com.example.demo.service.AuthenticationService;
+import com.example.demo.service.PasswordResetService;
 import com.example.demo.service.RefreshTokenService;
 import com.example.demo.service.UserService;
 import com.example.demo.controller.config.JwtService;
@@ -43,6 +44,9 @@ public class AuthenticationController {
     private RefreshTokenRepository RefreshTokenRepository;
 
     @Autowired
+    private PasswordResetService pw;
+
+    @Autowired
     private JwtService jwtservice;
 
     @PostMapping("/register")
@@ -55,7 +59,9 @@ public class AuthenticationController {
         if (user.isEmpty()) {
 
             if (usermail.isEmpty()) {
+                pw.verifyUserEmail(request.getEmail());
                 return ResponseEntity.ok(service.register(request));
+
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mail existente");
 

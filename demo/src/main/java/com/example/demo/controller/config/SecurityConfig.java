@@ -38,6 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> req.requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/pass/**").permitAll()
                         .requestMatchers("/users/email").permitAll()
+                        .requestMatchers("/users/verify-email").permitAll()
                         .requestMatchers(HttpMethod.GET).permitAll()
                         .requestMatchers(HttpMethod.PUT)
                         .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
