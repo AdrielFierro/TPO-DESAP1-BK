@@ -68,40 +68,6 @@ public class UserController {
         return ResponseEntity.ok(commentsCount);
     }
 
-    // Get Followers
-    @GetMapping("/{userId}/followers")
-    public ResponseEntity<Set<User>> getFollowers(@PathVariable Integer userId) {
-        Set<User> followers = userService.getFollowers(userId);
-        if (followers.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(followers);
-    }
-
-    // Get Followed
-    @GetMapping("/{userId}/followed")
-    public ResponseEntity<Set<User>> getFollowed(@PathVariable Integer userId) {
-        Set<User> followed = userService.getFollowed(userId);
-        if (followed.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(followed);
-    }
-
-    @PostMapping("/{userId}/follow/{followUserId}")
-    public ResponseEntity<User> followUser(
-            @PathVariable Integer userId,
-            @PathVariable Integer followUserId) {
-        try {
-            User followedUser = userService.followUser(userId, followUserId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(followedUser);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null); // Usuario ya seguido
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Usuario no encontrado
-        }
-    }
-
     // Get User by Email
     @GetMapping("/email")
     public ResponseEntity<User> getUserByEmail(@RequestParam String email) {

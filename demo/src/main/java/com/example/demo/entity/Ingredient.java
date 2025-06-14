@@ -10,11 +10,13 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class Ingredient {
 
     @Id
@@ -29,12 +31,5 @@ public class Ingredient {
 
     @Column
     private String nombreMedida;
-
-    @ManyToOne
-    @JoinColumn(name = "idRecipe") // Foreign Key hacia la tabla Recipe
-    private Recipe receta;
-
-    @Column // Foreign Key hacia la tabla Recipe
-    private Integer usuario;
 
 }

@@ -22,14 +22,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT COUNT(c) FROM Comment c WHERE c.userId = :id_user")
     int countCommentsByUserId(Integer id_user);
 
-    // Método para obtener los seguidores de un usuario
-    @Query("SELECT f FROM User u JOIN u.followers f WHERE u.id = :userId")
-    Set<User> getFollowers(@Param("userId") Integer userId);
-
-    // Método para obtener los seguidos de un usuario
-    @Query("SELECT f FROM User u JOIN u.followed f WHERE u.id = :userId")
-    Set<User> getFollowed(@Param("userId") Integer userId);
-
     Optional<User> findByName(String name);
 
     Optional<User> findByUsername(String username);
