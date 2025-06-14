@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 
 import org.springframework.beans.factory.annotation.Autowired;

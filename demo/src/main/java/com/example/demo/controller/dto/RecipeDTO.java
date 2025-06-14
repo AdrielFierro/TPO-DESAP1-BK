@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.Ingredient;
+import com.example.demo.entity.Paso;
 
 import lombok.Data;
 
@@ -19,4 +20,6 @@ public class RecipeDTO {
     private String process;
 
     private ArrayList<Ingredient> ingredientes;
+
+    private ArrayList<PasoDTO> pasosDTO;
 }

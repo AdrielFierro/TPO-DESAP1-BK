@@ -6,10 +6,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.controller.dto.PasoDTO;
 import com.example.demo.controller.dto.RecipeDTO;
 import com.example.demo.entity.Ingredient;
+import com.example.demo.entity.Paso;
 import com.example.demo.entity.Recipe;
-import com.example.demo.entity.User;
+
 import com.example.demo.entity.Status;
 import com.example.demo.service.ImageService;
 import com.example.demo.service.RecipeService;
@@ -19,7 +21,6 @@ import io.jsonwebtoken.io.IOException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/recipes")
@@ -44,12 +45,16 @@ public class RecipeController {
         // ArrayList<String> urls = imageService.fileToURL(recipeDTO.getImagesPost());
 
         ArrayList<Ingredient> ingredientsDTO = recipeDTO.getIngredientes();
+        ArrayList<PasoDTO> pasosDTO = recipeDTO.getPasosDTO();
+
+        ArrayList<Paso> pasos = recipeService.pasosDTOaPasos(pasosDTO);
 
         LocalDateTime fecha = LocalDateTime.now();
 
         Recipe recipe = Recipe.builder().title(recipeDTO.getTitle()).process(recipeDTO.getProcess())
                 .fecha(fecha)
                 .ingredientes(ingredientsDTO)
+                .pasos(pasos)
                 .status(Status.PENDIENTE)
                 .userId(userId).build();
 

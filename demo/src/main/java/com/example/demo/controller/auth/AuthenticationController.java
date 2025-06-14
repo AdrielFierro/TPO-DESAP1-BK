@@ -18,7 +18,6 @@ import com.example.demo.repository.RefreshTokenRepository;
 import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.PasswordResetService;
 import com.example.demo.service.RefreshTokenService;
-import com.example.demo.service.UserService;
 import com.example.demo.controller.config.JwtService;
 import com.example.demo.entity.*;
 
@@ -30,9 +29,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationController {
 
     private final AuthenticationService service;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private RefreshTokenService refreshTokenService;

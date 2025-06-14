@@ -38,6 +38,9 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Ingredient> ingredientes;
 
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Paso> pasos;
+
     @Column(nullable = false)
     private LocalDateTime fecha;
 
