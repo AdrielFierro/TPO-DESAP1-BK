@@ -46,20 +46,15 @@ public class User implements UserDetails {
     @Column
     private String urlImage;
 
+    @Column
+    private String ubicacion;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column
     private Boolean status;
-
-    @ManyToMany
-    @JoinTable(name = "user_followers", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "follower_id"))
-    private Set<User> followers;
-
-    @ManyToMany
-    @JoinTable(name = "user_followed", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
-    private Set<User> followed;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

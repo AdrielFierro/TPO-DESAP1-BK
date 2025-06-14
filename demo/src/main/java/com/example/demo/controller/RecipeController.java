@@ -12,7 +12,6 @@ import com.example.demo.entity.Recipe;
 import com.example.demo.entity.User;
 import com.example.demo.entity.Status;
 import com.example.demo.service.ImageService;
-import com.example.demo.service.IngredientService;
 import com.example.demo.service.RecipeService;
 import com.example.demo.service.UserService;
 
@@ -35,35 +34,24 @@ public class RecipeController {
     @Autowired
     private ImageService imageService;
 
-    @Autowired
-    private IngredientService ingredientService;
-
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Recipe> createRecipe(@RequestHeader("Authorization") String authorizationHeader,
-            @ModelAttribute RecipeDTO recipeDTO)
+            @RequestBody RecipeDTO recipeDTO)
             throws IOException {
 
         Integer userId = userService.getIdfromToken(authorizationHeader);
 
         // ArrayList<String> urls = imageService.fileToURL(recipeDTO.getImagesPost());
 
-        ArrayList<Ingredient> ingredients = recipeDTO.getIngredientes();
+        ArrayList<Ingredient> ingredientsDTO = recipeDTO.getIngredientes();
 
         LocalDateTime fecha = LocalDateTime.now();
 
-        // Recipe recipe =
-        // Recipe.builder().title(recipeDTO.getTitle()).process(recipeDTO.getProcess()).image(urls)
-        // .fecha(fecha)
-        // .status(Status.PENDIENTE)
-        // .userId(userId).build();
-
         Recipe recipe = Recipe.builder().title(recipeDTO.getTitle()).process(recipeDTO.getProcess())
                 .fecha(fecha)
+                .ingredientes(ingredientsDTO)
                 .status(Status.PENDIENTE)
                 .userId(userId).build();
-
-        // Recipe recipe = recipeService.addIngredientes(recipeSin.getIdRecipe(),
-        // ingredients);
 
         Recipe createdRecipe = recipeService.createRecipe(recipe);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdRecipe);

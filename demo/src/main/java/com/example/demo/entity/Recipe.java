@@ -35,7 +35,7 @@ public class Recipe {
     @Column
     private Status status;
 
-    @ElementCollection
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Ingredient> ingredientes;
 
     @Column(nullable = false)

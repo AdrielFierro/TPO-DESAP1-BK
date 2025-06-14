@@ -33,6 +33,8 @@ public class AuthenticationService {
                                 .password(passwordEncoder.encode(request.getPassword()))
                                 .role(request.getRole())
                                 .status(false)
+                                .description(request.getDescription())
+                                .ubicacion(request.getUbicacion())
                                 .build();
                 repository.save(usuario);
 
