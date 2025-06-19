@@ -1,16 +1,11 @@
 package com.example.demo.controller.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class PasoDTO {
-
-    String nombrePaso;
-
-    int proceso;
-
-    MultipartFile imagen;
-
+    private String nombrePaso;
+    private int proceso;
+    private MultipartFile imagen; // Se carga manualmente en el controller
 }

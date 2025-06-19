@@ -23,12 +23,16 @@ public class Recipe {
     @Column
     private String title;
 
+    @Column
+    private int puntaje;
+
     @ElementCollection
     private List<String> image;
 
     @Column(nullable = false)
     private Integer userId;
 
+    // esto lo podemos sacar, no va
     @Column
     private String process;
 
@@ -43,5 +47,8 @@ public class Recipe {
 
     @Column(nullable = false)
     private LocalDateTime fecha;
+
+    @Column
+    private int tiempoReceta;
 
 }

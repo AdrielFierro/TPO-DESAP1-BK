@@ -1,25 +1,13 @@
 package com.example.demo.controller.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.web.multipart.MultipartFile;
-
-import com.example.demo.entity.Ingredient;
-import com.example.demo.entity.Paso;
-
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class RecipeDTO {
-
     private String title;
-
-    // private List<MultipartFile> imagesPost;
-
     private String process;
-
-    private ArrayList<Ingredient> ingredientes;
-
-    private ArrayList<PasoDTO> pasosDTO;
+    private String ingredientesJson; // [{"nombre":"Harina","medida":500,"nombreMedida":"gramos"}]
+    private String pasosJson; // [{"nombrePaso":"Mezclar","proceso":1}, {...}]
+    private MultipartFile[] imagenesPasos;
 }
