@@ -9,7 +9,6 @@ import com.example.demo.entity.User;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {

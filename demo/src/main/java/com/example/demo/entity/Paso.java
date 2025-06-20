@@ -15,19 +15,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Ingredient {
+public class Paso {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idIngrediente;
+    private int idPaso;
 
     @Column
-    private String nombre;
+    private String Proceso;
 
     @Column
-    private int medida;
-
-    @Column
-    private String nombreMedida;
+    private String url;
 
 }
