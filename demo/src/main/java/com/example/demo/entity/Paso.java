@@ -22,9 +22,6 @@ public class Paso {
     private int idPaso;
 
     @Column
-    private String nombrePaso;
-
-    @Column
     private String Proceso;
 
     @Column

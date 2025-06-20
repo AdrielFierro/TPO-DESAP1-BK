@@ -24,17 +24,13 @@ public class Recipe {
     private String title;
 
     @Column
-    private int puntaje;
+    private Double puntaje;
 
-    @ElementCollection
-    private List<String> image;
+    @Column
+    private String imagePortada;
 
     @Column(nullable = false)
     private Integer userId;
-
-    // esto lo podemos sacar, no va
-    @Column
-    private String process;
 
     @Column
     private Status status;
@@ -50,5 +46,9 @@ public class Recipe {
 
     @Column
     private int tiempoReceta;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "recipe_id") // Agrega esto para vincularlo si no usás mappedBy
+    private List<Rating> puntajes;
 
 }

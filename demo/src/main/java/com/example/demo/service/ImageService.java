@@ -2,16 +2,12 @@ package com.example.demo.service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+// import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.azure.core.util.BinaryData;
+// import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
@@ -25,11 +21,6 @@ public class ImageService {
     ImageRepository imageRepository;
 
     private final String containerName = "images";
-
-    public ArrayList<String> fileToURL(List<MultipartFile> imagesPost) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'fileToURL'");
-    }
 
     public String uploadImage(String originalImageName, InputStream data, long length)
             throws IOException {
@@ -58,9 +49,9 @@ public class ImageService {
 
     }
 
-    public ResponseEntity<BinaryData> downloadImage(String url) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'downloadImage'");
-    }
+    // public ResponseEntity<BinaryData> downloadImage(String url) {
+    // throw new UnsupportedOperationException("Unimplemented method
+    // 'downloadImage'");
+    // }
 
 }
