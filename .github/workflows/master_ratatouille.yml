@@ -21,22 +21,23 @@ jobs:
       - name: Set up Java version
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'microsoft'
+          java-version: "17"
+          distribution: "microsoft"
 
       - name: Build with Maven
+        working-directory: ./demo
         run: mvn clean install
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          path: "${{ github.workspace }}/demo/target/*.jar"
 
   deploy:
     runs-on: windows-latest
     needs: build
-    
+
     permissions:
       id-token: write #This is required for requesting the JWT
       contents: read #This is required for actions/checkout
@@ -46,7 +47,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: java-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -58,7 +59,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'Ratatouille'
-          slot-name: 'Production'
-          package: '*.jar'
-          
+          app-name: "Ratatouille"
+          slot-name: "Production"
+          package: "*.jar"
