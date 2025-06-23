@@ -8,6 +8,8 @@ import com.example.demo.entity.Status;
 import com.example.demo.service.RecipeService;
 import com.example.demo.service.UserService;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/recipes")
@@ -137,6 +140,68 @@ public class RecipeController {
         }
 
         return recipe.getPuntaje();
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getRecipes(@RequestHeader("Authorization") String authorizationHeader) {
+
+        List<Recipe> recipes = recipeService.getAllRecipes();
+
+        return ResponseEntity.ok().body(recipes);
+    }
+
+    // postea un rating a una receta
+
+    @DeleteMapping("/{recipeId}")
+    public ResponseEntity<?> deleteRecipe(@RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Integer recipeId) {
+
+        Integer userId = userService.getIdfromToken(authorizationHeader);
+
+        Recipe recipeToDelete = recipeService.getRecipeById(recipeId);
+
+        if (recipeToDelete == null) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Receta inexistente");
+
+        }
+
+        if (userId == recipeToDelete.getUserId()) {
+
+            recipeService.deleteRecipe(recipeId);
+
+            return ResponseEntity.ok().body("Receta eliminada");
+
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No sos el dueño de la receta");
+    }
+
+    @PutMapping("/{recipeId}")
+    public ResponseEntity<?> putRecipe(@PathVariable Integer recipeId,
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody RecipeDTO recipeDTO) {
+
+        Integer userId = userService.getIdfromToken(authorizationHeader);
+
+        Recipe recipe = recipeService.getRecipeById(recipeId);
+
+        if (recipe == null) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Receta inexistente");
+
+        }
+
+        if (userId == recipe.getUserId()) {
+
+            Recipe recipeeditada = recipeService.editrecipe(recipeId, recipeDTO);
+
+            return ResponseEntity.ok().body(recipeeditada);
+
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No sos el dueño de la receta");
+
     }
 
 }

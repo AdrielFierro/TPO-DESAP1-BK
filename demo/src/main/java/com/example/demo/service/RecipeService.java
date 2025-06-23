@@ -7,9 +7,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.example.demo.controller.dto.PasoDTO;
 import com.example.demo.controller.dto.RatingDTO;
+import com.example.demo.controller.dto.RecipeDTO;
 import com.example.demo.entity.Paso;
 import com.example.demo.entity.Rating;
 import com.example.demo.entity.Recipe;
@@ -152,5 +152,28 @@ public class RecipeService {
 
         return ratingToDelete;
 
+    }
+
+    public List<Recipe> getAllRecipes() {
+
+        return recipeRepository.findAll();
+    }
+
+    public void deleteRecipe(Integer recipeId) {
+
+        recipeRepository.deleteById(recipeId);
+
+    }
+
+    public Recipe editrecipe(Integer recipeId, RecipeDTO recipeDTO) {
+
+        Recipe recipe = recipeRepository.getById(recipeId);
+
+        recipe.setTitle(recipeDTO.getTitle());
+        recipe.setImagePortada(recipeDTO.getImagePortada());
+        recipe.setIngredientes(recipeDTO.getIngredientes());
+        recipe.setPasos(recipeDTO.getPasos());
+        recipe.setTiempoReceta(recipeDTO.getDuracion());
+        return recipeRepository.save(recipe);
     }
 }
