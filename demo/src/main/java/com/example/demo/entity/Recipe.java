@@ -41,8 +41,8 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Paso> pasos;
 
-    @Column(nullable = false)
-    private LocalDateTime fecha;
+    @Column
+    private LocalDateTime fechaAprobacion;
 
     @Column
     private int tiempoReceta;
@@ -50,5 +50,8 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "recipe_id") // Agrega esto para vincularlo si no usás mappedBy
     private List<Rating> puntajes;
+
+    @Column
+    private String motivo;
 
 }

@@ -4,9 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.example.demo.controller.config.JwtService;
+import com.example.demo.entity.Recipe;
 import com.example.demo.entity.User;
+import com.example.demo.repository.RecipeRepository;
 import com.example.demo.repository.UserRepository;
 
 import java.util.List;
@@ -16,6 +21,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @Autowired
     private JwtService jwts;
@@ -62,11 +70,6 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public int getUserCommentsCount(Integer userId) {
-        // Lógica para contar los comentarios de un usuario
-        return userRepository.countCommentsByUserId(userId);
-    }
-
     public boolean isEmailUsed(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
@@ -83,4 +86,27 @@ public class UserService {
         return user.getStatus();
     }
 
+    public boolean toggleFeaturedRecipe(Integer userId, Integer recipeId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receta no encontrada"));
+
+        List<Recipe> featured = user.getFeaturedRecipes();
+
+        if (featured.contains(recipe)) {
+            featured.remove(recipe);
+            userRepository.save(user);
+            return false; // se quitó
+        }
+
+        if (featured.size() >= 10) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No podés tener más de 10 recetas destacadas");
+        }
+
+        featured.add(recipe);
+        userRepository.save(user);
+        return true; // se agregó
+    }
 }

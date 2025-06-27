@@ -1,9 +1,11 @@
 package com.example.demo.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import com.example.demo.controller.dto.RecipeDTO;
 import com.example.demo.entity.Paso;
 import com.example.demo.entity.Rating;
 import com.example.demo.entity.Recipe;
+import com.example.demo.entity.Status;
 import com.example.demo.entity.User;
 import com.example.demo.repository.RecipeRepository;
 import com.example.demo.repository.UserRepository;
@@ -167,6 +170,7 @@ public class RecipeService {
 
     public Recipe editrecipe(Integer recipeId, RecipeDTO recipeDTO) {
 
+        @SuppressWarnings("deprecation")
         Recipe recipe = recipeRepository.getById(recipeId);
 
         recipe.setTitle(recipeDTO.getTitle());
@@ -176,4 +180,80 @@ public class RecipeService {
         recipe.setTiempoReceta(recipeDTO.getDuracion());
         return recipeRepository.save(recipe);
     }
+
+    public RecipeDTO approveRecipe(Integer recipeId) {
+
+        @SuppressWarnings("deprecation")
+        Recipe recipe = recipeRepository.getById(recipeId);
+        LocalDateTime fecha = LocalDateTime.now();
+        recipe.setStatus(Status.APROBADO);
+        recipe.setFechaAprobacion(fecha);
+        recipeRepository.save(recipe);
+
+        RecipeDTO recipeDTO = this.toRecipeDTO(recipe);
+        return recipeDTO;
+
+    }
+
+    @SuppressWarnings("deprecation")
+    public RecipeDTO toRecipeDTO(Recipe recipe) {
+
+        User user = userRepository.getById(recipe.getUserId());
+
+        RecipeDTO recipeDTO = RecipeDTO.builder().title(recipe.getTitle()).ingredientes(recipe.getIngredientes())
+                .estado(recipe.getStatus())
+                .motivo(recipe.getMotivo())
+                .imagePortada(recipe.getImagePortada())
+                .pasos(recipe.getPasos())
+                .duracion(recipe.getTiempoReceta())
+                .autor(user.getUsername())
+                .build();
+
+        return recipeDTO;
+    }
+
+    public List<RecipeDTO> getRecipesByStatus(Status status) {
+        List<Recipe> recipes = recipeRepository.findByStatus(status);
+        return recipes.stream()
+                .map(this::toRecipeDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<RecipeDTO> getLast3ApprovedRecipes() {
+        List<Recipe> recipes = recipeRepository.findTop3ByStatusOrderByFechaAprobacionDesc(Status.APROBADO);
+        return recipes.stream().map(this::toRecipeDTO).toList();
+    }
+
+    @SuppressWarnings("deprecation")
+    public RecipeDTO rejectRecipe(Integer recipeId, String motivo) {
+
+        Recipe recipe = recipeRepository.getById(recipeId);
+        recipe.setMotivo(motivo);
+        recipe.setStatus(Status.RECHAZADO);
+        recipeRepository.save(recipe);
+        RecipeDTO recipeDTO = this.toRecipeDTO(recipe);
+
+        return recipeDTO;
+    }
+
+    public void addFeaturedRecipe(User user, Recipe recipe) {
+        List<Recipe> featured = user.getFeaturedRecipes();
+
+        if (featured.contains(recipe))
+            return;
+
+        if (featured.size() >= 10) {
+            throw new IllegalStateException("El usuario ya tiene 10 recetas destacadas.");
+        }
+
+        featured.add(recipe);
+        userRepository.save(user);
+    }
+
+    public List<RecipeDTO> getAllaprobadasRecipes() {
+        return recipeRepository.findByStatus(Status.APROBADO).stream()
+                .map(this::toRecipeDTO)
+                .toList();
+    }
+
 }
