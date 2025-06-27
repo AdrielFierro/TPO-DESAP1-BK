@@ -41,7 +41,7 @@ public class Recipe {
     @OneToMany(cascade = CascadeType.PERSIST)
     private List<Paso> pasos;
 
-    @Column
+    @Column(nullable = true)
     private LocalDateTime fechaAprobacion;
 
     @Column
