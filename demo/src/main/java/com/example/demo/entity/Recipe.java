@@ -51,4 +51,7 @@ public class Recipe {
     @JoinColumn(name = "recipe_id") // Agrega esto para vincularlo si no usás mappedBy
     private List<Rating> puntajes;
 
+    @Column
+    private String motivo;
+
 }

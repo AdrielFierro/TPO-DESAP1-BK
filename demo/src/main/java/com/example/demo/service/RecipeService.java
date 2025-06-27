@@ -4,15 +4,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.example.demo.controller.dto.PasoDTO;
 import com.example.demo.controller.dto.RatingDTO;
 import com.example.demo.controller.dto.RecipeDTO;
 import com.example.demo.entity.Paso;
 import com.example.demo.entity.Rating;
 import com.example.demo.entity.Recipe;
+import com.example.demo.entity.Status;
 import com.example.demo.entity.User;
 import com.example.demo.repository.RecipeRepository;
 import com.example.demo.repository.UserRepository;
@@ -167,6 +172,7 @@ public class RecipeService {
 
     public Recipe editrecipe(Integer recipeId, RecipeDTO recipeDTO) {
 
+        @SuppressWarnings("deprecation")
         Recipe recipe = recipeRepository.getById(recipeId);
 
         recipe.setTitle(recipeDTO.getTitle());
@@ -176,4 +182,68 @@ public class RecipeService {
         recipe.setTiempoReceta(recipeDTO.getDuracion());
         return recipeRepository.save(recipe);
     }
+
+    public RecipeDTO approveRecipe(Integer recipeId) {
+
+        @SuppressWarnings("deprecation")
+        Recipe recipe = recipeRepository.getById(recipeId);
+        recipe.setStatus(Status.APROBADO);
+        recipeRepository.save(recipe);
+
+        RecipeDTO recipeDTO = this.toRecipeDTO(recipe);
+        return recipeDTO;
+
+    }
+
+    public RecipeDTO toRecipeDTO(Recipe recipe) {
+
+        RecipeDTO recipeDTO = RecipeDTO.builder().title(recipe.getTitle()).ingredientes(recipe.getIngredientes())
+                .estado(recipe.getStatus())
+                .motivo(recipe.getMotivo())
+                .imagePortada(recipe.getImagePortada())
+                .pasos(recipe.getPasos())
+                .build();
+
+        return recipeDTO;
+    }
+
+    public List<RecipeDTO> getRecipesByStatus(Status status) {
+        List<Recipe> recipes = recipeRepository.findByStatus(status);
+        return recipes.stream()
+                .map(this::toRecipeDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<RecipeDTO> getLast3ApprovedRecipes() {
+        List<Recipe> recipes = recipeRepository.findTop3ByStatusOrderByFechaDesc(Status.APROBADO);
+        return recipes.stream()
+                .map(this::toRecipeDTO)
+                .collect(Collectors.toList());
+    }
+
+    public RecipeDTO rejectRecipe(Integer recipeId, String motivo) {
+
+        Recipe recipe = recipeRepository.getById(recipeId);
+        recipe.setMotivo(motivo);
+        recipe.setStatus(Status.RECHAZADO);
+        recipeRepository.save(recipe);
+        RecipeDTO recipeDTO = this.toRecipeDTO(recipe);
+
+        return recipeDTO;
+    }
+
+    public void addFeaturedRecipe(User user, Recipe recipe) {
+        List<Recipe> featured = user.getFeaturedRecipes();
+
+        if (featured.contains(recipe))
+            return;
+
+        if (featured.size() >= 10) {
+            throw new IllegalStateException("El usuario ya tiene 10 recetas destacadas.");
+        }
+
+        featured.add(recipe);
+        userRepository.save(user);
+    }
+
 }
