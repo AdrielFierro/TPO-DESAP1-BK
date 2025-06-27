@@ -17,10 +17,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.name LIKE %:contains%")
     List<User> findUsers(@Param("contains") String contains, Pageable pageable);
 
-    // Método para obtener comentarios x User Id
-    @Query("SELECT COUNT(c) FROM Comment c WHERE c.userId = :id_user")
-    int countCommentsByUserId(Integer id_user);
-
     Optional<User> findByName(String name);
 
     Optional<User> findByUsername(String username);

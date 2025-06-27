@@ -60,13 +60,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // Get Comments
-    @GetMapping("/{userId}/comments")
-    public ResponseEntity<Integer> getUserComments(@PathVariable Integer userId) {
-        int commentsCount = userService.getUserCommentsCount(userId);
-        return ResponseEntity.ok(commentsCount);
-    }
-
     // Get User by Email
     @GetMapping("/email")
     public ResponseEntity<User> getUserByEmail(@RequestParam String email) {

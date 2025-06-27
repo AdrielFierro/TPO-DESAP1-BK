@@ -3,7 +3,6 @@ package com.example.demo.controller.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.demo.entity.Ingredient;
@@ -20,4 +19,5 @@ public class RecipeDTO {
     private String imagePortada;
     private Status estado;
     private String motivo;
+    private String autor;
 }

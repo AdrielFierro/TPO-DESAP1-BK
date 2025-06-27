@@ -70,11 +70,6 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public int getUserCommentsCount(Integer userId) {
-        // Lógica para contar los comentarios de un usuario
-        return userRepository.countCommentsByUserId(userId);
-    }
-
     public boolean isEmailUsed(String email) {
         return userRepository.findByEmail(email).isPresent();
     }

@@ -20,6 +20,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
     List<Recipe> findByStatus(Status status);
 
-    List<Recipe> findTop3ByStatusOrderByFechaDesc(Status status);
+    List<Recipe> findTop3ByStatusOrderByFechaAprobacionDesc(Status status);
 
 }

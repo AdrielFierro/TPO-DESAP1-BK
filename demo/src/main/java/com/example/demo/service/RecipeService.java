@@ -1,16 +1,14 @@
 package com.example.demo.service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.example.demo.controller.dto.PasoDTO;
 import com.example.demo.controller.dto.RatingDTO;
 import com.example.demo.controller.dto.RecipeDTO;
@@ -187,7 +185,9 @@ public class RecipeService {
 
         @SuppressWarnings("deprecation")
         Recipe recipe = recipeRepository.getById(recipeId);
+        LocalDateTime fecha = LocalDateTime.now();
         recipe.setStatus(Status.APROBADO);
+        recipe.setFechaAprobacion(fecha);
         recipeRepository.save(recipe);
 
         RecipeDTO recipeDTO = this.toRecipeDTO(recipe);
@@ -195,13 +195,18 @@ public class RecipeService {
 
     }
 
+    @SuppressWarnings("deprecation")
     public RecipeDTO toRecipeDTO(Recipe recipe) {
+
+        User user = userRepository.getById(recipe.getUserId());
 
         RecipeDTO recipeDTO = RecipeDTO.builder().title(recipe.getTitle()).ingredientes(recipe.getIngredientes())
                 .estado(recipe.getStatus())
                 .motivo(recipe.getMotivo())
                 .imagePortada(recipe.getImagePortada())
                 .pasos(recipe.getPasos())
+                .duracion(recipe.getTiempoReceta())
+                .autor(user.getUsername())
                 .build();
 
         return recipeDTO;
@@ -215,12 +220,11 @@ public class RecipeService {
     }
 
     public List<RecipeDTO> getLast3ApprovedRecipes() {
-        List<Recipe> recipes = recipeRepository.findTop3ByStatusOrderByFechaDesc(Status.APROBADO);
-        return recipes.stream()
-                .map(this::toRecipeDTO)
-                .collect(Collectors.toList());
+        List<Recipe> recipes = recipeRepository.findTop3ByStatusOrderByFechaAprobacionDesc(Status.APROBADO);
+        return recipes.stream().map(this::toRecipeDTO).toList();
     }
 
+    @SuppressWarnings("deprecation")
     public RecipeDTO rejectRecipe(Integer recipeId, String motivo) {
 
         Recipe recipe = recipeRepository.getById(recipeId);
@@ -244,6 +248,12 @@ public class RecipeService {
 
         featured.add(recipe);
         userRepository.save(user);
+    }
+
+    public List<RecipeDTO> getAllaprobadasRecipes() {
+        return recipeRepository.findByStatus(Status.APROBADO).stream()
+                .map(this::toRecipeDTO)
+                .toList();
     }
 
 }

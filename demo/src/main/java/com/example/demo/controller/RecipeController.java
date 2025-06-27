@@ -9,8 +9,6 @@ import com.example.demo.entity.User;
 import com.example.demo.service.RecipeService;
 import com.example.demo.service.UserService;
 
-import jakarta.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,13 +20,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -49,12 +45,10 @@ public class RecipeController {
 
         Integer userId = userService.getIdfromToken(authorizationHeader);
 
-        LocalDateTime fecha = LocalDateTime.now();
-
         Recipe recipe = Recipe.builder().title(recipeDTO.getTitle())
-                .fecha(fecha)
                 .ingredientes(recipeDTO.getIngredientes())
                 .status(Status.PENDIENTE)
+                .tiempoReceta(recipeDTO.getDuracion())
                 .userId(userId)
                 .pasos(recipeDTO.getPasos())
                 .imagePortada(recipeDTO.getImagePortada()).build();
@@ -262,6 +256,14 @@ public class RecipeController {
                 : "Receta eliminada de destacadas";
 
         return ResponseEntity.ok(mensaje);
+    }
+
+    @GetMapping("/aprobadas")
+    public ResponseEntity<?> getRecipesAprobadas(@RequestHeader("Authorization") String authorizationHeader) {
+
+        List<RecipeDTO> recipes = recipeService.getAllaprobadasRecipes();
+
+        return ResponseEntity.ok().body(recipes);
     }
 
 }
