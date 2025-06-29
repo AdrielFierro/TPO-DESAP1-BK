@@ -225,7 +225,8 @@ public class RecipeController {
     }
 
     @GetMapping("/status/aprobados/ultimas")
-    public ResponseEntity<List<RecipeDTO>> getLast3ApprovedRecipes() {
+    public ResponseEntity<List<RecipeDTO>> getLast3ApprovedRecipes(
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
 
         return ResponseEntity.ok(recipeService.getLast3ApprovedRecipes());
     }
