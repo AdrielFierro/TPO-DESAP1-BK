@@ -259,11 +259,10 @@ public class RecipeController {
     }
 
     @GetMapping("/aprobadas")
-    public ResponseEntity<?> getRecipesAprobadas(@RequestHeader("Authorization") String authorizationHeader) {
-
+    public ResponseEntity<?> getRecipesAprobadas(@RequestHeader(name = "Authorization", required = false) String authorizationHeader) {
         List<RecipeDTO> recipes = recipeService.getAllaprobadasRecipes();
-
         return ResponseEntity.ok().body(recipes);
     }
+
 
 }
