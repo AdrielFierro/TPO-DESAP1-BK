@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE)
                         .hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET).permitAll()
                         .anyRequest()
                         .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
