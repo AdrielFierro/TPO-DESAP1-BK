@@ -231,6 +231,7 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.getLast3ApprovedRecipes());
     }
 
+
     @GetMapping("/guardadas")
     public ResponseEntity<List<RecipeDTO>> getMyFeaturedRecipes(@RequestHeader("Authorization") String authHeader) {
         Integer userId = userService.getIdfromToken(authHeader);
@@ -259,11 +260,10 @@ public class RecipeController {
     }
 
     @GetMapping("/aprobadas")
-    public ResponseEntity<?> getRecipesAprobadas(@RequestHeader("Authorization") String authorizationHeader) {
-
+    public ResponseEntity<?> getRecipesAprobadas(@RequestHeader(name = "Authorization", required = false) String authorizationHeader) {
         List<RecipeDTO> recipes = recipeService.getAllaprobadasRecipes();
-
         return ResponseEntity.ok().body(recipes);
     }
+
 
 }
