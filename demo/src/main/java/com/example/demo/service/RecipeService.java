@@ -207,6 +207,7 @@ public class RecipeService {
         User user = userRepository.getById(recipe.getUserId());
 
         RecipeDTO recipeDTO = RecipeDTO.builder().title(recipe.getTitle()).ingredientes(recipe.getIngredientes())
+                .idRecipe(recipe.getIdRecipe())
                 .estado(recipe.getStatus())
                 .motivo(recipe.getMotivo())
                 .imagePortada(recipe.getImagePortada())
