@@ -146,6 +146,17 @@ public class RecipeController {
         return ResponseEntity.ok().body(recipes);
     }
 
+    @GetMapping("/myrecipes")
+    public ResponseEntity<List<RecipeDTO>> getMyRecipes(
+            @RequestHeader("Authorization") String authorizationHeader) {
+
+        Integer userId = userService.getIdfromToken(authorizationHeader);
+        List<RecipeDTO> recetas = recipeService.getRecipesByUser(userId);
+
+        return ResponseEntity.ok(recetas);
+    }
+
+
     // postea un rating a una receta
 
     @DeleteMapping("/{recipeId}")
