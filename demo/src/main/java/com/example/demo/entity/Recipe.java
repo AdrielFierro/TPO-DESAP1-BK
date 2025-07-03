@@ -35,10 +35,12 @@ public class Recipe {
     @Column
     private Status status;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "recipe_id") // Esto vincula pasos con la receta
     private List<Ingredient> ingredientes;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "recipe_id") // Esto vincula pasos con la receta
     private List<Paso> pasos;
 
     @Column(nullable = true)

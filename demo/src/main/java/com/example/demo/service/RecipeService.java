@@ -163,10 +163,9 @@ public class RecipeService {
     }
 
     public List<RecipeDTO> getRecipesByUser(Integer userId) {
-    List<Recipe> recetas = recipeRepository.findByUserId(userId);
-    return recetas.stream().map(this::toRecipeDTO).toList();
+        List<Recipe> recetas = recipeRepository.findByUserId(userId);
+        return recetas.stream().map(this::toRecipeDTO).toList();
     }
-
 
     public void deleteRecipe(Integer recipeId) {
 
@@ -176,14 +175,54 @@ public class RecipeService {
 
     public Recipe editrecipe(Integer recipeId, RecipeDTO recipeDTO) {
 
-        @SuppressWarnings("deprecation")
-        Recipe recipe = recipeRepository.getById(recipeId);
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RuntimeException("Receta no encontrada"));
 
         recipe.setTitle(recipeDTO.getTitle());
         recipe.setImagePortada(recipeDTO.getImagePortada());
-        recipe.setIngredientes(recipeDTO.getIngredientes());
-        recipe.setPasos(recipeDTO.getPasos());
+
         recipe.setTiempoReceta(recipeDTO.getDuracion());
+        recipe.setStatus(Status.PENDIENTE);
+        recipe.setMotivo(recipeDTO.getMotivo());
+
+        // 1. Obtener pasos actuales de la receta
+        List<Paso> pasosActuales = recipe.getPasos();
+
+        // 2. Crear nueva lista de pasos actualizada
+        List<Paso> pasosActualizados = new ArrayList<>();
+
+        for (Paso pasoDTO : recipeDTO.getPasos()) {
+
+            if (pasoDTO.getIdPaso() != null) {
+                // Buscar si el paso ya existe
+                Optional<Paso> pasoExistenteOpt = pasosActuales.stream()
+                        .filter(p -> p.getIdPaso().equals(pasoDTO.getIdPaso()))
+                        .findFirst();
+
+                if (pasoExistenteOpt.isPresent()) {
+                    // Paso ya existente → actualizar campos
+                    Paso pasoExistente = pasoExistenteOpt.get();
+                    pasoExistente.setProceso(pasoDTO.getProceso());
+                    pasoExistente.setUrl(pasoDTO.getUrl()); // si tiene imagen
+                    pasosActualizados.add(pasoExistente);
+                } else {
+                    // Paso con ID no encontrado → lo tratamos como nuevo por seguridad
+                    pasosActualizados.add(pasoDTO);
+                }
+            } else {
+                // Paso nuevo sin ID
+                pasosActualizados.add(pasoDTO);
+            }
+        }
+
+        // 3. Reemplazar pasos en la receta
+        pasosActuales.clear(); // importante si usás orphanRemoval
+        pasosActuales.addAll(pasosActualizados);
+
+        // Limpiás y agregás los nuevos ingredientes, sin reemplazar la lista
+        recipe.getIngredientes().clear();
+        recipe.getIngredientes().addAll(recipeDTO.getIngredientes());
+
         return recipeRepository.save(recipe);
     }
 
