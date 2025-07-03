@@ -162,6 +162,12 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 
+    public List<RecipeDTO> getRecipesByUser(Integer userId) {
+    List<Recipe> recetas = recipeRepository.findByUserId(userId);
+    return recetas.stream().map(this::toRecipeDTO).toList();
+    }
+
+
     public void deleteRecipe(Integer recipeId) {
 
         recipeRepository.deleteById(recipeId);
