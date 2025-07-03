@@ -40,6 +40,8 @@ public class SecurityConfig {
                         .requestMatchers("/users/email").permitAll()
                         .requestMatchers("/users/verify-email").permitAll()
                         .requestMatchers("/recipes/status/aprobados/ultimas").permitAll()
+                        .requestMatchers("/recipes/ratings/**").permitAll()
+                        .requestMatchers("/recipes/totalrating/**").permitAll()
                         .requestMatchers("/recipes/aprobar/**")
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers("/recipes/rechazar/**")
