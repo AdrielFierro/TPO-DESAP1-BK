@@ -114,4 +114,9 @@ public class UserService {
     public User getUserByalias(String alias) {
         return userRepository.findByUsername(alias).orElse(null);
     }
+
+    public Integer countRecipes(Integer userId) {
+
+        return (int) recipeRepository.countByUserId(userId);
+    }
 }
