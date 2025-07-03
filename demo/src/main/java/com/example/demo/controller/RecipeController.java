@@ -98,7 +98,8 @@ public class RecipeController {
     }
 
     @GetMapping("/ratings/{recipeId}")
-    public ResponseEntity<?> getRatingsByRecipe(@PathVariable Integer recipeId) {
+    public ResponseEntity<?> getRatingsByRecipe(
+            @RequestHeader(name = "Authorization", required = false) @PathVariable Integer recipeId) {
         Recipe recipe = recipeService.getRecipeById(recipeId);
 
         if (recipe == null) {
@@ -107,7 +108,6 @@ public class RecipeController {
 
         List<Rating> ratings = recipe.getPuntajes();
 
-        // Opcional: ocultar el usuario en cada rating
         ratings.forEach(r -> r.setUser(null));
 
         return ResponseEntity.ok(ratings);
@@ -128,7 +128,8 @@ public class RecipeController {
     }
 
     @GetMapping("/totalrating/{recipeId}")
-    public Double getTotalRatingByRecipe(@PathVariable Integer recipeId) {
+    public Double getTotalRatingByRecipe(
+            @RequestHeader(name = "Authorization", required = false) @PathVariable Integer recipeId) {
         Recipe recipe = recipeService.getRecipeById(recipeId);
 
         if (recipe == null) {
@@ -155,7 +156,6 @@ public class RecipeController {
 
         return ResponseEntity.ok(recetas);
     }
-
 
     // postea un rating a una receta
 
@@ -242,7 +242,6 @@ public class RecipeController {
         return ResponseEntity.ok(recipeService.getLast3ApprovedRecipes());
     }
 
-
     @GetMapping("/guardadas")
     public ResponseEntity<List<RecipeDTO>> getMyFeaturedRecipes(@RequestHeader("Authorization") String authHeader) {
         Integer userId = userService.getIdfromToken(authHeader);
@@ -271,10 +270,10 @@ public class RecipeController {
     }
 
     @GetMapping("/aprobadas")
-    public ResponseEntity<?> getRecipesAprobadas(@RequestHeader(name = "Authorization", required = false) String authorizationHeader) {
+    public ResponseEntity<?> getRecipesAprobadas(
+            @RequestHeader(name = "Authorization", required = false) String authorizationHeader) {
         List<RecipeDTO> recipes = recipeService.getAllaprobadasRecipes();
         return ResponseEntity.ok().body(recipes);
     }
-
 
 }
