@@ -109,4 +109,8 @@ public class UserService {
         userRepository.save(user);
         return true; // se agregó
     }
+
+    public User getUserByalias(String alias) {
+        return userRepository.findByUsername(alias).orElse(null);
+    }
 }

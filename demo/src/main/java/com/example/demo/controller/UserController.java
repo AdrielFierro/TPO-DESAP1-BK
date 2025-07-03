@@ -67,6 +67,13 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    // Get User by Alias
+    @GetMapping("/alias")
+    public ResponseEntity<User> getUserByAlias(@RequestParam String alias) {
+        User user = userService.getUserByalias(alias);
+        return ResponseEntity.ok(user);
+    }
+
     @GetMapping("/isEmailUsed")
     public ResponseEntity<Boolean> isEmailUsed(@RequestParam String email) {
         boolean exists = userService.isEmailUsed(email);
