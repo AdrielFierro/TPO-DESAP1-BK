@@ -7,7 +7,9 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -61,8 +63,8 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    @OneToMany
+    @ManyToMany
     @JoinTable(name = "user_featured_recipes", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "recipe_id"))
-    private List<Recipe> featuredRecipes = new ArrayList<>();
+    private Set<Recipe> featuredRecipes = new HashSet<>();
 
 }

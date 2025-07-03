@@ -50,7 +50,7 @@ public class Recipe {
     private int tiempoReceta;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "recipe_id") // Agrega esto para vincularlo si no usás mappedBy
+    @JoinColumn(name = "recipe_id")
     private List<Rating> puntajes;
 
     @Column

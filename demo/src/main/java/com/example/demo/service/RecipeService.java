@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,7 +201,7 @@ public class RecipeService {
                         .findFirst();
 
                 if (pasoExistenteOpt.isPresent()) {
-                    // Paso ya existente → actualizar campos
+
                     Paso pasoExistente = pasoExistenteOpt.get();
                     pasoExistente.setProceso(pasoDTO.getProceso());
                     pasoExistente.setUrl(pasoDTO.getUrl()); // si tiene imagen
@@ -216,7 +217,7 @@ public class RecipeService {
         }
 
         // 3. Reemplazar pasos en la receta
-        pasosActuales.clear(); // importante si usás orphanRemoval
+        pasosActuales.clear();
         pasosActuales.addAll(pasosActualizados);
 
         // Limpiás y agregás los nuevos ingredientes, sin reemplazar la lista
@@ -283,7 +284,7 @@ public class RecipeService {
     }
 
     public void addFeaturedRecipe(User user, Recipe recipe) {
-        List<Recipe> featured = user.getFeaturedRecipes();
+        Set<Recipe> featured = user.getFeaturedRecipes();
 
         if (featured.contains(recipe))
             return;

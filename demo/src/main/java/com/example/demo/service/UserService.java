@@ -15,6 +15,7 @@ import com.example.demo.repository.RecipeRepository;
 import com.example.demo.repository.UserRepository;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -93,7 +94,7 @@ public class UserService {
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Receta no encontrada"));
 
-        List<Recipe> featured = user.getFeaturedRecipes();
+        Set<Recipe> featured = user.getFeaturedRecipes();
 
         if (featured.contains(recipe)) {
             featured.remove(recipe);
