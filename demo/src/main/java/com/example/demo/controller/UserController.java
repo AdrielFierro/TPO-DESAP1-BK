@@ -94,4 +94,12 @@ public class UserController {
         return ResponseEntity.ok(exists);
     }
 
+    // Get User
+    @GetMapping("/cantrecetas")
+    public ResponseEntity<Integer> getCantRecetas(@RequestHeader("Authorization") String authHeader) {
+        Integer userId = userService.getIdfromToken(authHeader);
+        Integer countRecetas = userService.countRecipes(userId);
+        return ResponseEntity.ok(countRecetas);
+    }
+
 }

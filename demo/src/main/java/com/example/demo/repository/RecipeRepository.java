@@ -22,4 +22,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
     List<Recipe> findTop3ByStatusOrderByFechaAprobacionDesc(Status status);
 
+    long countByUserId(Integer userId);
+
 }
