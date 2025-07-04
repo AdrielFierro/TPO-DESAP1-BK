@@ -68,7 +68,7 @@ public class UserController {
     }
 
     // Get User by Alias
-    @GetMapping("/alias")
+    @PostMapping("/alias")
     public ResponseEntity<User> getUserByAlias(@RequestParam String alias) {
         User user = userService.getUserByalias(alias);
         return ResponseEntity.ok(user);
