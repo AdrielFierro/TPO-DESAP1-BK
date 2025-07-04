@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/recipes/status/aprobados/ultimas").permitAll()
                         .requestMatchers("/recipes/ratings/**").permitAll()
                         .requestMatchers("/recipes/totalrating/**").permitAll()
+                        .requestMatchers("/users/alias").permitAll()
                         .requestMatchers("/recipes/aprobar/**")
                         .hasAnyAuthority(Role.ADMIN.name())
                         .requestMatchers("/recipes/rechazar/**")
