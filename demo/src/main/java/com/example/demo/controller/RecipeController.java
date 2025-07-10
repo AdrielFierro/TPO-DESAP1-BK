@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.controller.dto.RecipeDTO;
+import com.example.demo.controller.dto.RatingConAutorDTO;
 import com.example.demo.controller.dto.RatingDTO;
 import com.example.demo.entity.Rating;
 import com.example.demo.entity.Recipe;
@@ -71,7 +72,7 @@ public class RecipeController {
         }
 
         Rating createdrating = recipeService.rateRecipe(rating, userId);
-        createdrating.setUser(null);
+        //createdrating.setUser(null);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdrating);
     }
@@ -99,19 +100,27 @@ public class RecipeController {
 
     @GetMapping("/ratings/{recipeId}")
     public ResponseEntity<?> getRatingsByRecipe(
-            @RequestHeader(name = "Authorization", required = false) @PathVariable Integer recipeId) {
-        Recipe recipe = recipeService.getRecipeById(recipeId);
+        @RequestHeader(name = "Authorization", required = false) String authorizationHeader,
+        @PathVariable Integer recipeId) {
 
-        if (recipe == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La receta no existe");
-        }
+    Recipe recipe = recipeService.getRecipeById(recipeId);
 
-        List<Rating> ratings = recipe.getPuntajes();
-
-        ratings.forEach(r -> r.setUser(null));
-
-        return ResponseEntity.ok(ratings);
+    if (recipe == null) {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La receta no existe");
     }
+
+    List<RatingConAutorDTO> ratings = recipe.getPuntajes().stream()
+            .map(r -> new RatingConAutorDTO(
+                    r.getIdRecipe(),
+                    r.getPuntaje(),
+                    r.getComentario(),
+                    r.getUser() != null ? r.getUser().getUsername() : null
+            ))
+            .toList();
+
+    return ResponseEntity.ok(ratings);
+    }
+
 
     @DeleteMapping("/rating/{recipeId}")
     public ResponseEntity<?> deleteRating(@RequestHeader("Authorization") String authorizationHeader,
