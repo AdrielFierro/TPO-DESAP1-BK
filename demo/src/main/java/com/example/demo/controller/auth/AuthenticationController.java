@@ -86,7 +86,7 @@ public class AuthenticationController {
         User realuser = user.get();
         int iduser = realuser.getId();
 
-        System.out.println("Username REAL: " + realuser);
+        System.out.println("Username REAL: " + realuser.getUsername());
         System.out.println("ID REAL: " + iduser);
 
         Optional<RefreshToken> refreshTokenSearched = RefreshTokenRepository.findByUser_id(iduser);
