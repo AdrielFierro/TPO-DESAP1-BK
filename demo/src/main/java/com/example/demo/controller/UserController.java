@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.demo.controller.dto.UserDTO;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 
@@ -26,12 +28,12 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    // Get User
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Integer userId) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Integer userId) {
         User user = userService.getUserById(userId);
-        return user != null ? ResponseEntity.ok(user) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return user != null ? ResponseEntity.ok(userService.toDTO(user)) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
 
     // para empezar
     @GetMapping("/test")
@@ -60,18 +62,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    // Get User by Email
     @GetMapping("/email")
-    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
+    public ResponseEntity<UserDTO> getUserByEmail(@RequestParam String email) {
         User user = userService.getUserByEmail(email);
-        return ResponseEntity.ok(user);
+        return user != null ? ResponseEntity.ok(userService.toDTO(user)) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
-    // Get User by Alias
+
     @PostMapping("/alias")
-    public ResponseEntity<User> getUserByAlias(@RequestParam String alias) {
+    public ResponseEntity<UserDTO> getUserByAlias(@RequestParam String alias) {
         User user = userService.getUserByalias(alias);
-        return ResponseEntity.ok(user);
+        return user != null ? ResponseEntity.ok(userService.toDTO(user)) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping("/isEmailUsed")
