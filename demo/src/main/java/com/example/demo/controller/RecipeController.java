@@ -149,12 +149,15 @@ public class RecipeController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getRecipes(@RequestHeader("Authorization") String authorizationHeader) {
-
+    public ResponseEntity<List<RecipeDTO>> getRecipes(@RequestHeader("Authorization") String authorizationHeader) {
         List<Recipe> recipes = recipeService.getAllRecipes();
+        List<RecipeDTO> result = recipes.stream()
+            .map(recipeService::toRecipeDTO)
+            .toList();
 
-        return ResponseEntity.ok().body(recipes);
+        return ResponseEntity.ok(result);
     }
+
 
     @GetMapping("/myrecipes")
     public ResponseEntity<List<RecipeDTO>> getMyRecipes(
