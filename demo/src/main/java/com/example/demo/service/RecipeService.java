@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.controller.dto.PasoDTO;
+import com.example.demo.controller.dto.RatingConAutorDTO;
 import com.example.demo.controller.dto.RatingDTO;
 import com.example.demo.controller.dto.RecipeDTO;
 import com.example.demo.entity.Paso;
@@ -302,5 +303,15 @@ public class RecipeService {
                 .map(this::toRecipeDTO)
                 .toList();
     }
+
+    public RatingConAutorDTO toRatingConAutorDTO(Rating rating) {
+    return RatingConAutorDTO.builder()
+            .idRecipe(rating.getIdRecipe())
+            .puntaje(rating.getPuntaje())
+            .comentario(rating.getComentario())
+            .user(rating.getUser().getUsername())
+            .build();
+}
+
 
 }

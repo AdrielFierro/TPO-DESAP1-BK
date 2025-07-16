@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.controller.config.JwtService;
+import com.example.demo.controller.dto.UserDTO;
 import com.example.demo.entity.Recipe;
 import com.example.demo.entity.User;
 import com.example.demo.repository.RecipeRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.controller.dto.UserDTO;
 
 import java.util.List;
 import java.util.Set;
@@ -119,4 +121,20 @@ public class UserService {
 
         return (int) recipeRepository.countByUserId(userId);
     }
+
+    public UserDTO toDTO(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setName(user.getName());
+        dto.setLastName(user.getLastName());
+        dto.setUbicacion(user.getUbicacion());
+        dto.setUrlImage(user.getUrlImage());
+        dto.setStatus(user.getStatus());
+        dto.setRole(user.getRole().toString());
+        dto.setDescription(user.getDescription()); // 🔥 AGREGADO
+        return dto;
+    }
+
 }
