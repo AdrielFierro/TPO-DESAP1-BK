@@ -14,8 +14,6 @@ import com.example.demo.entity.Recipe;
 import com.example.demo.entity.User;
 import com.example.demo.repository.RecipeRepository;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.controller.dto.UserDTO;
-
 import java.util.List;
 import java.util.Set;
 
@@ -133,7 +131,7 @@ public class UserService {
         dto.setUrlImage(user.getUrlImage());
         dto.setStatus(user.getStatus());
         dto.setRole(user.getRole().toString());
-        dto.setDescription(user.getDescription()); // 🔥 AGREGADO
+        dto.setDescription(user.getDescription());
         return dto;
     }
 
