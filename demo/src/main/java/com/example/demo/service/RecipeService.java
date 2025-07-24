@@ -235,6 +235,7 @@ public class RecipeService {
         LocalDateTime fecha = LocalDateTime.now();
         recipe.setStatus(Status.APROBADO);
         recipe.setFechaAprobacion(fecha);
+        recipe.setMotivo(null); // Limpiar motivo al aprobar
         recipeRepository.save(recipe);
 
         RecipeDTO recipeDTO = this.toRecipeDTO(recipe);
