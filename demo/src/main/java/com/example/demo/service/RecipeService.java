@@ -89,6 +89,8 @@ public class RecipeService {
             Rating rating = existingRating.get();
             rating.setPuntaje(ratingDTO.getPuntaje());
             rating.setComentario(ratingDTO.getComentario());
+            rating.setMotivo(null);
+            rating.setStatus(Status.PENDIENTE);
             finalRating = rating;
         } else {
 
@@ -96,6 +98,7 @@ public class RecipeService {
                     .idRecipe(ratingDTO.getRecipeId())
                     .puntaje(ratingDTO.getPuntaje())
                     .comentario(ratingDTO.getComentario())
+                    .status(Status.PENDIENTE)
                     .user(user)
                     .build();
 
@@ -306,13 +309,66 @@ public class RecipeService {
     }
 
     public RatingConAutorDTO toRatingConAutorDTO(Rating rating) {
-    return RatingConAutorDTO.builder()
-            .idRecipe(rating.getIdRecipe())
-            .puntaje(rating.getPuntaje())
-            .comentario(rating.getComentario())
-            .user(rating.getUser().getUsername())
-            .build();
-}
+        return RatingConAutorDTO.builder()
+                .idRecipe(rating.getIdRecipe())
+                .puntaje(rating.getPuntaje())
+                .comentario(rating.getComentario())
+                .user(rating.getUser().getUsername())
+                .build();
+    }
 
+    public RatingDTO approveRating(Integer ratingId) {
+        // Buscar la receta que contiene este rating
+        List<Recipe> recetas = recipeRepository.findAll();
+
+        for (Recipe receta : recetas) {
+            for (Rating rating : receta.getPuntajes()) {
+                if (rating.getIdRating() == ratingId) {
+                    // Cambiar estado del rating
+                    rating.setStatus(Status.APROBADO);
+
+                    // Guardar receta con el rating actualizado
+                    recipeRepository.save(receta);
+
+                    // Devolver el rating mapeado
+                    return toRatingDTO(rating);
+                }
+            }
+        }
+
+        // Si no se encontró el rating
+        throw new RuntimeException("Rating no encontrado con ID: " + ratingId);
+    }
+
+    public RatingDTO rejectRating(Integer ratingId, String motivo) {
+        List<Recipe> recetas = recipeRepository.findAll();
+
+        for (Recipe receta : recetas) {
+            for (Rating rating : receta.getPuntajes()) {
+                if (rating.getIdRating() == ratingId) {
+                    rating.setStatus(Status.RECHAZADO);
+                    rating.setMotivo(motivo);
+
+                    recipeRepository.save(receta);
+
+                    return toRatingDTO(rating);
+                }
+            }
+        }
+
+        throw new RuntimeException("Rating no encontrado con ID: " + ratingId);
+    }
+
+    private RatingDTO toRatingDTO(Rating rating) {
+
+        User user = rating.getUser();
+
+        return RatingDTO.builder()
+                .recipeId(rating.getIdRecipe())
+                .puntaje(rating.getPuntaje())
+                .comentario(rating.getComentario())
+                .user(user.getUsername())
+                .build();
+    }
 
 }

@@ -15,9 +15,8 @@ public class EmailSender {
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
-        // TODO remove this line in production
-        properties.put("mail.smtp.ssl.trust", "*"); // <- ACEPTA TODOS LOS CERTIFICADOS (inseguro)
 
+        properties.put("mail.smtp.ssl.trust", "*"); // <- ACEPTA TODOS LOS CERTIFICADOS (inseguro)
 
         Session session = Session.getInstance(properties, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {

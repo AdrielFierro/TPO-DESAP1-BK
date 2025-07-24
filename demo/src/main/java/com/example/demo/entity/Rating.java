@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +27,15 @@ public class Rating {
 
     @Column(length = 1000)
     private String comentario;
+
+    @Column
+    private Status status;
+
+    @Column(nullable = true)
+    private LocalDateTime fechaAprobacion;
+
+    @Column
+    private String motivo;
 
     @ManyToOne
     private User user;

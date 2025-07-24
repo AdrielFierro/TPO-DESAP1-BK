@@ -72,7 +72,7 @@ public class RecipeController {
         }
 
         Rating createdrating = recipeService.rateRecipe(rating, userId);
-        //createdrating.setUser(null);
+        // createdrating.setUser(null);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdrating);
     }
@@ -100,27 +100,25 @@ public class RecipeController {
 
     @GetMapping("/ratings/{recipeId}")
     public ResponseEntity<?> getRatingsByRecipe(
-        @RequestHeader(name = "Authorization", required = false) String authorizationHeader,
-        @PathVariable Integer recipeId) {
+            @RequestHeader(name = "Authorization", required = false) String authorizationHeader,
+            @PathVariable Integer recipeId) {
 
-    Recipe recipe = recipeService.getRecipeById(recipeId);
+        Recipe recipe = recipeService.getRecipeById(recipeId);
 
-    if (recipe == null) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La receta no existe");
+        if (recipe == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "La receta no existe");
+        }
+
+        List<RatingConAutorDTO> ratings = recipe.getPuntajes().stream().filter(r -> r.getStatus() == Status.APROBADO)
+                .map(r -> new RatingConAutorDTO(
+                        r.getIdRecipe(),
+                        r.getPuntaje(),
+                        r.getComentario(),
+                        r.getUser() != null ? r.getUser().getUsername() : null))
+                .toList();
+
+        return ResponseEntity.ok(ratings);
     }
-
-    List<RatingConAutorDTO> ratings = recipe.getPuntajes().stream()
-            .map(r -> new RatingConAutorDTO(
-                    r.getIdRecipe(),
-                    r.getPuntaje(),
-                    r.getComentario(),
-                    r.getUser() != null ? r.getUser().getUsername() : null
-            ))
-            .toList();
-
-    return ResponseEntity.ok(ratings);
-    }
-
 
     @DeleteMapping("/rating/{recipeId}")
     public ResponseEntity<?> deleteRating(@RequestHeader("Authorization") String authorizationHeader,
@@ -152,12 +150,11 @@ public class RecipeController {
     public ResponseEntity<List<RecipeDTO>> getRecipes(@RequestHeader("Authorization") String authorizationHeader) {
         List<Recipe> recipes = recipeService.getAllRecipes();
         List<RecipeDTO> result = recipes.stream()
-            .map(recipeService::toRecipeDTO)
-            .toList();
+                .map(recipeService::toRecipeDTO)
+                .toList();
 
         return ResponseEntity.ok(result);
     }
-
 
     @GetMapping("/myrecipes")
     public ResponseEntity<List<RecipeDTO>> getMyRecipes(
@@ -237,6 +234,23 @@ public class RecipeController {
 
         RecipeDTO recipeRechazada = recipeService.rejectRecipe(recipeId, motivo);
         return ResponseEntity.ok().body(recipeRechazada);
+
+    }
+
+    @PutMapping("aprobarComentarios/{ratingId}")
+    public ResponseEntity<?> putapprovecomment(@PathVariable Integer ratingId,
+            @RequestHeader("Authorization") String authorizationHeader) {
+        RatingDTO ratingAprobada = recipeService.approveRating(ratingId);
+        return ResponseEntity.ok().body(ratingAprobada);
+
+    }
+
+    @PutMapping("rechazarComentarios/{ratingId}")
+    public ResponseEntity<?> putrejectcomment(@PathVariable Integer ratingId,
+            @RequestHeader("Authorization") String authorizationHeader, @RequestBody String motivo) {
+
+        RatingDTO ratingRechazada = recipeService.rejectRating(ratingId, motivo);
+        return ResponseEntity.ok().body(ratingRechazada);
 
     }
 
